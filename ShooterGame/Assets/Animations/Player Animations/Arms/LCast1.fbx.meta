@@ -63,7 +63,7 @@ ModelImporter:
       - time: 0.39490402
         functionName: SpawnProjectile
         data: 
-        objectReferenceParameter: {instanceID: 0}
+        objectReferenceParameter: {fileID: 11500000, guid: 182014892cd36ce438c2dd9bf1e6c48c, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0

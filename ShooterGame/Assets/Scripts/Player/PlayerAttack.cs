@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
+    
     [SerializeField] private Camera playerCamera;
     [SerializeField] private Transform leftHandPos;
     [SerializeField] private Transform rightHandPos;
@@ -21,7 +22,6 @@ public class PlayerAttack : MonoBehaviour
     private int attackID = 0;
     private float spread = 0;
     private int shotNumber = 1;
-    private float upwardsForce;
     public float xSpread;
     public float ySpread;
 
@@ -33,6 +33,29 @@ public class PlayerAttack : MonoBehaviour
 
     private void CycleAttack()
     {
+        if (Input.GetAxisRaw("Mouse ScrollWheel") < 0f)
+        {
+            if (attackID > differentProjectiles.Length - 2)
+            {
+                attackID = 0;
+            }
+            else
+            {
+                attackID++;
+            }
+        }
+
+        if (Input.GetAxisRaw("Mouse ScrollWheel") > 0f)
+        {
+            if (attackID < 1)
+            {
+                attackID = differentProjectiles.Length - 1;
+            }
+            else
+            {
+                attackID--;
+            }
+        }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             attackID = 0;
@@ -40,27 +63,24 @@ public class PlayerAttack : MonoBehaviour
             castCooldown = 1f;
             shotNumber = 1;
             spread = 0;
-            upwardsForce = 0f;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             attackID = 1;
-            projectileSpeed = 200f;
+            projectileSpeed = 300f;
             castCooldown = 2f;
-            shotNumber = 4;
-            spread = 0.5f;
-            upwardsForce = 0f;
+            shotNumber = 6;
+            spread = 0.3f;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             attackID = 2;
-            projectileSpeed = 400f;
-            castCooldown = 2f;
+            projectileSpeed = 100f;
+            castCooldown = 1f;
             shotNumber = 1;
-            spread = 1f;
-            upwardsForce = 400f;
+            spread = 0f;
         }
     }
 
@@ -108,14 +128,16 @@ public class PlayerAttack : MonoBehaviour
 
         for (int k = 0; k < shotNumber; k++)
         {
+            GameObject projectileObject = Instantiate(differentProjectiles[attackID], startingPoint.position, Quaternion.identity);
+
             xSpread = Random.Range(-spread, spread);
             ySpread = Random.Range(-spread, spread);
             projectileDirection = castDestination - startingPoint.position;
-            projectileDirection += new Vector3(xSpread, ySpread, 0f);
-            GameObject projectileObject = Instantiate(differentProjectiles[attackID], startingPoint.position, Quaternion.identity);
+            projectileDirection += new Vector3(0f, ySpread, xSpread);
             projectileObject.transform.forward = projectileDirection.normalized;
+
             projectileObject.GetComponentInChildren<Rigidbody>().AddForce(projectileObject.transform.forward * projectileSpeed, ForceMode.Force);
-            projectileObject.GetComponentInChildren<Rigidbody>().AddForce(projectileObject.transform.up * upwardsForce, ForceMode.Acceleration);
         }
     }
+    
 }

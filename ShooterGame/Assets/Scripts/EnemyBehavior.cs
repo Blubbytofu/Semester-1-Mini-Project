@@ -8,6 +8,7 @@ public class EnemyBehavior : MonoBehaviour
     public Rigidbody[] ragdollRb;
     public CharacterJoint[] ragdollJoints;
     public GameObject enemyOrientation;
+    public GameObject player;
 
     public float maxHealth = 100f;
     public float health;
@@ -15,6 +16,7 @@ public class EnemyBehavior : MonoBehaviour
     private void Awake()
     {
         health = maxHealth;
+        player = GameObject.Find("Player");
         ragdollRb = GetComponentsInChildren<Rigidbody>();
         ragdollJoints = GetComponentsInChildren<CharacterJoint>();
 
@@ -24,6 +26,17 @@ public class EnemyBehavior : MonoBehaviour
         }
 
         DisableRagdoll();
+    }
+
+    private void Update()
+    {
+        transform.LookAt(player.transform.position);
+    }
+
+    private void FixedUpdate()
+    {
+        //Vector3 playerDirection = (player.transform.position - transform.position).normalized;
+        //enemyRigidbody.AddForce(playerDirection * speed, ForceMode.Acceleration);
     }
 
     public void TakeDamage(float damage)
@@ -81,8 +94,12 @@ public class EnemyBehavior : MonoBehaviour
             }
 
             rb.AddForce(launchDirection * randomForce, ForceMode.Impulse);
+            Invoke("DestroyThis", 2f);
         }
+    }
 
-        Invoke("DisableRagdoll", 1.5f);
+    private void DestroyThis()
+    {
+        Destroy(gameObject);
     }
 }
