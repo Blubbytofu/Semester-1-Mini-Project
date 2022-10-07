@@ -5,18 +5,48 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     public GameObject enemyPrefab;
-    public GameObject player;
-    public int xRange = 20;
-    public int zRange = 20;
+    [SerializeField] GameObject player;
 
-    void Start()
+    private Vector3 centerPoint = new Vector3(0, 0, 0);
+
+    [SerializeField] private int waveNumber = 1;
+    [SerializeField] private int enemyCount;
+
+    public int xRange = 99;
+    public int zRange = 99;
+
+    private void Start()
     {
-        InvokeRepeating("InstantiateEnemy", 1f, 5f);
+        SpawnEnemyWave(1);
     }
 
-    void InstantiateEnemy()
+    private void Update()
     {
-        Vector3 spawnPos = player.transform.position + new Vector3(Random.Range(-xRange, xRange), 0f, Random.Range(-zRange, zRange));
+        enemyCount = FindObjectsOfType<EnemyBehavior>().Length;
+        if (enemyCount == 0)
+        {
+            SpawnEnemyWave(waveNumber);
+            waveNumber++;
+        }
+    }
+
+    private void SpawnEnemyWave(int number)
+    {
+        for (int k = 0; k < number; k++)
+        {
+            InstantiateEnemy();
+        }
+    }
+
+    private void InstantiateEnemy()
+    {
+        Vector3 spawnPos = new Vector3(0, 0, 0);
+        spawnPos = centerPoint + GetSpawnPoint();
         Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+    }
+
+    private Vector3 GetSpawnPoint()
+    {
+        return new Vector3(Random.Range(-xRange, xRange), 0f, Random.Range(-zRange, zRange));
     }
 }

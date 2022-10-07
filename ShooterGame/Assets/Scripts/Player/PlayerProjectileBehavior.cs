@@ -22,7 +22,7 @@ public class PlayerProjectileBehavior : MonoBehaviour
             Physics.IgnoreCollision(gameObject.GetComponent<SphereCollider>(), collision.gameObject.GetComponent<SphereCollider>());
         }
 
-        if (collision.collider.name != "Player" && !collision.gameObject.CompareTag("Bullet") && !hasCollided)
+        if (collision.collider.name != "Player" && !collision.gameObject.CompareTag("Bullet") && !collision.gameObject.CompareTag("Enemy") && !hasCollided)
         {
             hasCollided = true;
             Destroy(gameObject);
@@ -34,8 +34,20 @@ public class PlayerProjectileBehavior : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy"))
         {
             enemyBehavior = other.GetComponent<EnemyBehavior>();
-            enemyBehavior.TakeDamage(50);
-            Destroy(gameObject);
+            if (gameObject.name.Equals("ErekiBall2(Clone)"))
+            {
+                enemyBehavior.TakeDamage(34);
+                Destroy(gameObject);
+            }
+            else if (gameObject.name == "frameBall(Clone)")
+            {
+                enemyBehavior.TakeDamage(51);
+                Destroy(gameObject);
+            }
+            else if (gameObject.name == "Singularity(Clone)")
+            {
+                enemyBehavior.TakeDamage(101);
+            }
         }
     }
 

@@ -9,6 +9,8 @@ public class EnemyBehavior : MonoBehaviour
     public CharacterJoint[] ragdollJoints;
     public GameObject enemyOrientation;
     public GameObject player;
+    public Rigidbody enemyRb;
+    public CapsuleCollider enemyCollider;
 
     public float maxHealth = 100f;
     public float health;
@@ -19,6 +21,7 @@ public class EnemyBehavior : MonoBehaviour
         player = GameObject.Find("Player");
         ragdollRb = GetComponentsInChildren<Rigidbody>();
         ragdollJoints = GetComponentsInChildren<CharacterJoint>();
+        enemyCollider = GetComponent<CapsuleCollider>();
 
         foreach (var joint in ragdollJoints)
         {
@@ -31,12 +34,10 @@ public class EnemyBehavior : MonoBehaviour
     private void Update()
     {
         transform.LookAt(player.transform.position);
-    }
-
-    private void FixedUpdate()
-    {
-        //Vector3 playerDirection = (player.transform.position - transform.position).normalized;
-        //enemyRigidbody.AddForce(playerDirection * speed, ForceMode.Acceleration);
+        if (transform.position.y > 0)
+        {
+            transform.Translate(0, -0.1f, 0);
+        }
     }
 
     public void TakeDamage(float damage)
@@ -50,6 +51,7 @@ public class EnemyBehavior : MonoBehaviour
 
     private void DisableRagdoll()
     {
+        enemyCollider.enabled = true;
         enemyAnimator.enabled = true;
         foreach (var rb in ragdollRb)
         {
@@ -59,6 +61,7 @@ public class EnemyBehavior : MonoBehaviour
 
     private void EnableRagdoll()
     {
+        enemyCollider.enabled = false;
         enemyAnimator.enabled = false;
         foreach (var rb in ragdollRb)
         {
@@ -66,7 +69,7 @@ public class EnemyBehavior : MonoBehaviour
 
             int randomDirection = Random.Range(0, 6);
             var launchDirection = enemyOrientation.transform.up;
-            int randomForce = Random.Range(1, 100);
+            int randomForce = Random.Range(1, 150);
 
             if (randomDirection == 0)
             {

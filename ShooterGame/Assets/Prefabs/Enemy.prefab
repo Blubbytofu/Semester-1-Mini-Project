@@ -1717,6 +1717,7 @@ MonoBehaviour:
   ragdollJoints: []
   enemyOrientation: {fileID: 5390121748235432141}
   player: {fileID: 0}
+  enemyRb: {fileID: 0}
   maxHealth: 100
   health: 0
 --- !u!1 &5247447108432758198

@@ -59,7 +59,7 @@ public class PlayerAttack : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             attackID = 0;
-            projectileSpeed = 600f;
+            projectileSpeed = 1000f;
             castCooldown = 1f;
             shotNumber = 1;
             spread = 0;
@@ -68,17 +68,17 @@ public class PlayerAttack : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             attackID = 1;
-            projectileSpeed = 300f;
-            castCooldown = 2f;
-            shotNumber = 6;
-            spread = 0.3f;
+            projectileSpeed = 500f;
+            castCooldown = 1.5f;
+            shotNumber = 4;
+            spread = 1f;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             attackID = 2;
-            projectileSpeed = 100f;
-            castCooldown = 1f;
+            projectileSpeed = 200f;
+            castCooldown = 2f;
             shotNumber = 1;
             spread = 0f;
         }
