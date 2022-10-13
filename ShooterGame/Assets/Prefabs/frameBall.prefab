@@ -4871,6 +4871,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad42b513e7046b64abe0e8534d5a2198, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyBehavior: {fileID: 0}
+  hitEnemyEffect: {fileID: 8825691409029507523, guid: ac9d0150150c928409b87952feacc5b9, type: 3}
+  hitEnvironmentEffect: {fileID: 3842476062431196752, guid: 70b969b8985ec6c47ba50a720c55412b, type: 3}
 --- !u!1 &3132828505741897531
 GameObject:
   m_ObjectHideFlags: 0

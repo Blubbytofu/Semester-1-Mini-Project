@@ -7,17 +7,17 @@ public class SpawnManager : MonoBehaviour
     public GameObject enemyPrefab;
     [SerializeField] GameObject player;
 
-    private Vector3 centerPoint = new Vector3(0, 0, 0);
+    private Vector3 arenaCenter = Vector3.zero;
 
     [SerializeField] private int waveNumber = 1;
     [SerializeField] private int enemyCount;
 
-    public int xRange = 99;
-    public int zRange = 99;
+    public float spawnRange = 40f;
+    public float arenaRadius = 49f;
 
     private void Start()
     {
-        SpawnEnemyWave(1);
+        SpawnEnemyWave(waveNumber);
     }
 
     private void Update()
@@ -25,8 +25,8 @@ public class SpawnManager : MonoBehaviour
         enemyCount = FindObjectsOfType<EnemyBehavior>().Length;
         if (enemyCount == 0)
         {
-            SpawnEnemyWave(waveNumber);
             waveNumber++;
+            SpawnEnemyWave(waveNumber);
         }
     }
 
@@ -40,13 +40,16 @@ public class SpawnManager : MonoBehaviour
 
     private void InstantiateEnemy()
     {
-        Vector3 spawnPos = new Vector3(0, 0, 0);
-        spawnPos = centerPoint + GetSpawnPoint();
-        Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+        Instantiate(enemyPrefab, GetSpawnPoint(), Quaternion.identity);
     }
 
     private Vector3 GetSpawnPoint()
     {
-        return new Vector3(Random.Range(-xRange, xRange), 0f, Random.Range(-zRange, zRange));
+        return arenaCenter + new Vector3(GetReasonableDistance(player.transform.position.x + spawnRange), 0f, GetReasonableDistance(player.transform.position.z + spawnRange));
+    }
+
+    private float GetReasonableDistance(float positionComponent)
+    {
+        return Random.Range(Random.Range(-arenaRadius, -positionComponent), Random.Range(positionComponent, arenaRadius));
     }
 }

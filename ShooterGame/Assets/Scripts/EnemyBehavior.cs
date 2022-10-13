@@ -6,11 +6,12 @@ public class EnemyBehavior : MonoBehaviour
 {
     public Animator enemyAnimator;
     public Rigidbody[] ragdollRb;
+    public Collider[] ragdollCollider;
     public CharacterJoint[] ragdollJoints;
     public GameObject enemyOrientation;
     public GameObject player;
     public Rigidbody enemyRb;
-    public CapsuleCollider enemyCollider;
+    public Collider enemyCollider;
 
     public float maxHealth = 100f;
     public float health;
@@ -20,8 +21,9 @@ public class EnemyBehavior : MonoBehaviour
         health = maxHealth;
         player = GameObject.Find("Player");
         ragdollRb = GetComponentsInChildren<Rigidbody>();
+        ragdollCollider = GetComponentsInChildren<Collider>();
         ragdollJoints = GetComponentsInChildren<CharacterJoint>();
-        enemyCollider = GetComponent<CapsuleCollider>();
+        enemyCollider = GetComponent<Collider>();
 
         foreach (var joint in ragdollJoints)
         {
@@ -57,12 +59,22 @@ public class EnemyBehavior : MonoBehaviour
         {
             rb.isKinematic = true;
         }
+        foreach (var collider in ragdollCollider)
+        {
+            collider.isTrigger = true;
+        }
     }
 
     private void EnableRagdoll()
     {
         enemyCollider.enabled = false;
         enemyAnimator.enabled = false;
+
+        foreach (var collider in ragdollCollider)
+        {
+            collider.isTrigger = false;
+        }
+
         foreach (var rb in ragdollRb)
         {
             rb.isKinematic = false;
@@ -97,8 +109,14 @@ public class EnemyBehavior : MonoBehaviour
             }
 
             rb.AddForce(launchDirection * randomForce, ForceMode.Impulse);
+            rb.AddTorque(new Vector3(RandomTorque(), RandomTorque(), RandomTorque()), ForceMode.Impulse);
             Invoke("DestroyThis", 2f);
         }
+    }
+
+    private float RandomTorque()
+    {
+        return Random.Range(-0.1f, 0.1f);
     }
 
     private void DestroyThis()

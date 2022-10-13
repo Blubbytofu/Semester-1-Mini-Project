@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
@@ -8,7 +6,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private Camera playerCamera;
     [SerializeField] private Transform leftHandPos;
     [SerializeField] private Transform rightHandPos;
-    [SerializeField] private GameObject[] differentProjectiles;
+    [SerializeField] private GameObject projectile;
 
     private Vector3 castDestination;
 
@@ -18,70 +16,11 @@ public class PlayerAttack : MonoBehaviour
     public bool hasCastAnimation;
 
     private Vector3 projectileDirection;
-    public float projectileSpeed = 600f;
-    private int attackID = 0;
-    private float spread = 0;
-    private int shotNumber = 1;
-    public float xSpread;
-    public float ySpread;
+    public float projectileSpeed = 1000f;
 
     private void Update()
     {
         GetAttack();
-        CycleAttack();
-    }
-
-    private void CycleAttack()
-    {
-        if (Input.GetAxisRaw("Mouse ScrollWheel") < 0f)
-        {
-            if (attackID > differentProjectiles.Length - 2)
-            {
-                attackID = 0;
-            }
-            else
-            {
-                attackID++;
-            }
-        }
-
-        if (Input.GetAxisRaw("Mouse ScrollWheel") > 0f)
-        {
-            if (attackID < 1)
-            {
-                attackID = differentProjectiles.Length - 1;
-            }
-            else
-            {
-                attackID--;
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            attackID = 0;
-            projectileSpeed = 1000f;
-            castCooldown = 1f;
-            shotNumber = 1;
-            spread = 0;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            attackID = 1;
-            projectileSpeed = 500f;
-            castCooldown = 1.5f;
-            shotNumber = 4;
-            spread = 1f;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            attackID = 2;
-            projectileSpeed = 200f;
-            castCooldown = 2f;
-            shotNumber = 1;
-            spread = 0f;
-        }
     }
 
     private void GetAttack()
@@ -126,18 +65,12 @@ public class PlayerAttack : MonoBehaviour
             startingPoint = rightHandPos;
         }
 
-        for (int k = 0; k < shotNumber; k++)
-        {
-            GameObject projectileObject = Instantiate(differentProjectiles[attackID], startingPoint.position, Quaternion.identity);
+        GameObject projectileObject = Instantiate(projectile, startingPoint.position, Quaternion.identity);
 
-            xSpread = Random.Range(-spread, spread);
-            ySpread = Random.Range(-spread, spread);
-            projectileDirection = castDestination - startingPoint.position;
-            projectileDirection += new Vector3(0f, ySpread, xSpread);
-            projectileObject.transform.forward = projectileDirection.normalized;
+        projectileDirection = castDestination - startingPoint.position;
+        projectileObject.transform.forward = projectileDirection.normalized;
 
-            projectileObject.GetComponentInChildren<Rigidbody>().AddForce(projectileObject.transform.forward * projectileSpeed, ForceMode.Force);
-        }
+        projectileObject.GetComponentInChildren<Rigidbody>().AddForce(projectileObject.transform.forward * projectileSpeed, ForceMode.Force);
     }
     
 }

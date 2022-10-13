@@ -1664,7 +1664,7 @@ Transform:
   - {fileID: 78642146896461967}
   - {fileID: 5390121748235432140}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1992590521093126753
 Animator:
@@ -1714,10 +1714,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyAnimator: {fileID: 1992590521093126753}
   ragdollRb: []
+  ragdollCollider: []
   ragdollJoints: []
   enemyOrientation: {fileID: 5390121748235432141}
   player: {fileID: 0}
   enemyRb: {fileID: 0}
+  enemyCollider: {fileID: 0}
   maxHealth: 100
   health: 0
 --- !u!1 &5247447108432758198

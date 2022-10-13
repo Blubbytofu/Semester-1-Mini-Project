@@ -168,7 +168,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fd2fe83101e138547a9972ec3255e34b, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fd2fe83101e138547a9972ec3255e34b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -188,15 +188,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fd2fe83101e138547a9972ec3255e34b, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fd2fe83101e138547a9972ec3255e34b, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fd2fe83101e138547a9972ec3255e34b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fd2fe83101e138547a9972ec3255e34b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -509,7 +509,7 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2089159026}
     - targetCorrespondingSourceObject: {fileID: -3321919801592875672, guid: fd2fe83101e138547a9972ec3255e34b, type: 3}
-      insertIndex: -1
+      insertIndex: 0
       addedObject: {fileID: 963194228}
     - targetCorrespondingSourceObject: {fileID: 1852576806548013000, guid: fd2fe83101e138547a9972ec3255e34b, type: 3}
       insertIndex: -1
@@ -597,7 +597,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 112
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!114 &291098977
 MonoBehaviour:
@@ -631,14 +631,9 @@ MonoBehaviour:
   playerCamera: {fileID: 963194227}
   leftHandPos: {fileID: 2089159026}
   rightHandPos: {fileID: 1174576043}
-  differentProjectiles:
-  - {fileID: 3132828505741897529, guid: a60e67a2a0fb0d74c91c10607a82d8e1, type: 3}
-  - {fileID: 3567271925200273388, guid: 26b0ddf07d100684387e5c89e2d55cea, type: 3}
-  - {fileID: 3823496711242365309, guid: 03037df2d2fc91b4a8190dc844d72def, type: 3}
+  projectile: {fileID: 3132828505741897529, guid: a60e67a2a0fb0d74c91c10607a82d8e1, type: 3}
   hasCastAnimation: 0
   projectileSpeed: 600
-  xSpread: 0
-  ySpread: 0
 --- !u!4 &511528149 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6502182839619065283, guid: fd2fe83101e138547a9972ec3255e34b, type: 3}
@@ -920,7 +915,7 @@ RectTransform:
   m_Children:
   - {fileID: 1532503341}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1028,7 +1023,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 01e2247fef2615941aac5e5ce4431211, type: 2}
+  - {fileID: 2100000, guid: 7d2d1a3d6edfb5c4f9a81613715a69df, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1180,8 +1175,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: -0.0000000018626451, y: 4.038788e-13, z: -3.4830537e-12, w: 1}
-  m_LocalPosition: {x: 0, y: 0.151, z: 0.1061}
+  m_LocalRotation: {x: -0.0000000055879354, y: 8.588185e-13, z: -3.477848e-12, w: 1}
+  m_LocalPosition: {x: 0, y: 0.15099949, z: 0.106099784}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1237,7 +1232,7 @@ Transform:
   m_Children:
   - {fileID: 770693731}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1087890537
 GameObject:
@@ -1352,7 +1347,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1407,7 +1402,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1708621462
 MonoBehaviour:
