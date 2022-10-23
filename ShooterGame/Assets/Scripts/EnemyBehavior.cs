@@ -1,45 +1,91 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyBehavior : MonoBehaviour
 {
-    public Animator enemyAnimator;
-    public Rigidbody[] ragdollRb;
-    public Collider[] ragdollCollider;
-    public CharacterJoint[] ragdollJoints;
-    public GameObject enemyOrientation;
-    public GameObject player;
-    public Rigidbody enemyRb;
-    public Collider enemyCollider;
+    [SerializeField] private Animator enemyAnimator;
+    [SerializeField] private Rigidbody[] ragdollRb;
+    [SerializeField] private Collider[] ragdollCollider;
+    [SerializeField] private CharacterJoint[] ragdollJoints;
+    [SerializeField] private GameObject enemyOrientation;
+    [SerializeField] private GameObject player;
+    [SerializeField] private CapsuleCollider enemyCollider;
+    [SerializeField] private EnemyAttack enemyAttack;
+    [SerializeField] private GameObject enemyAttackRange;
+    [SerializeField] private GameManager gameManager;
 
-    public float maxHealth = 100f;
-    public float health;
+    private bool hasDied;
+
+    private float turnSpeed = 360f;
+
+    private float maxHealth = 100f;
+    private float health;
 
     private void Awake()
     {
-        health = maxHealth;
-        player = GameObject.Find("Player");
+        enemyAnimator = GetComponent<Animator>();
         ragdollRb = GetComponentsInChildren<Rigidbody>();
         ragdollCollider = GetComponentsInChildren<Collider>();
         ragdollJoints = GetComponentsInChildren<CharacterJoint>();
-        enemyCollider = GetComponent<Collider>();
+
+        player = GameObject.Find("Player");
+        enemyCollider = GetComponent<CapsuleCollider>();
+        enemyAttack = GetComponentInChildren<EnemyAttack>();
+
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
 
         foreach (var joint in ragdollJoints)
         {
             joint.enableProjection = true;
         }
 
+        enemyAnimator.SetInteger("movementType", Random.Range(0, 3));
+        if (enemyAnimator.GetInteger("movementType") == 2)
+        {
+            enemyCollider.center = new Vector3(0, 0.4f, 0);
+            enemyCollider.height = 0.7f;
+        }
+
         DisableRagdoll();
+
+        enemyAttackRange.SetActive(true);
+        health = maxHealth;
     }
 
     private void Update()
     {
-        transform.LookAt(player.transform.position);
-        if (transform.position.y > 0)
+        if (health > 0)
         {
-            transform.Translate(0, -0.1f, 0);
+            FacePlayer();
         }
+
+        if (transform.position.y < -10f)
+        {
+            gameManager.enemiesDestroyed++;
+            Destroy(gameObject);
+        }
+
+        if (gameManager.universalGameOver && !hasDied)
+        {
+            hasDied = true;
+            if (enemyAttack.doAttackAnimation && (enemyAnimator.GetInteger("movementType") == 0 || enemyAnimator.GetInteger("movementType") == 1))
+            {
+                enemyAnimator.SetTrigger("hitPlayer");
+            }
+            else
+            {
+                TakeDamage(maxHealth);
+            }
+        }
+    }
+
+    private void FacePlayer()
+    {
+        Vector3 direction = player.transform.position - transform.position;
+        direction.y = 0;
+        direction.Normalize();
+
+        Quaternion rotateToPlayer = Quaternion.LookRotation(direction, Vector3.up);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateToPlayer, turnSpeed * Time.deltaTime);
     }
 
     public void TakeDamage(float damage)
@@ -48,6 +94,9 @@ public class EnemyBehavior : MonoBehaviour
         if (health <= 0)
         {
             EnableRagdoll();
+            enemyAttackRange.SetActive(false);
+            gameManager.enemiesDestroyed++;
+            Destroy(gameObject, 3f);
         }
     }
 
@@ -109,18 +158,6 @@ public class EnemyBehavior : MonoBehaviour
             }
 
             rb.AddForce(launchDirection * randomForce, ForceMode.Impulse);
-            rb.AddTorque(new Vector3(RandomTorque(), RandomTorque(), RandomTorque()), ForceMode.Impulse);
-            Invoke("DestroyThis", 2f);
         }
-    }
-
-    private float RandomTorque()
-    {
-        return Random.Range(-0.1f, 0.1f);
-    }
-
-    private void DestroyThis()
-    {
-        Destroy(gameObject);
     }
 }

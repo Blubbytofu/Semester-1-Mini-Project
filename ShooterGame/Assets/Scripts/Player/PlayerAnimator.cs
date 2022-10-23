@@ -6,24 +6,46 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] private PlayerAttack playerAttack;
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private Rigidbody playerRigidbody;
+    [SerializeField] private GameManager gameManager;
 
-    [SerializeField] private float moveLerpSpeed = 4f;
+    [SerializeField] private float moveLerpSpeed = 100f;
 
     private float idleTime;
     private bool startIdling;
     public bool isIdling { get; private set; }
     private float idleThreshold = 2f;
 
+    private bool alreadyDead;
+
     private void Start()
     {
-        
+        playerMovement = GameObject.Find("Player").GetComponent<PlayerMovement>();
+        playerAttack = GameObject.Find("Player").GetComponent<PlayerAttack>();
+        playerAnimator = GameObject.Find("Player").GetComponent<Animator>();
+        playerRigidbody = GameObject.Find("Player").GetComponent<Rigidbody>();
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
     }
 
     private void Update()
     {
-        MovementAnimations();
-        JumpingAnimations();
-        ArmAvatarAnimations();
+        if (!gameManager.universalGameOver)
+        {
+            playerAnimator.SetLayerWeight(1, 1);
+
+            MovementAnimations();
+            JumpingAnimations();
+            ArmAvatarAnimations();
+        }
+        else
+        {
+            playerAnimator.SetLayerWeight(1, 0);
+
+            if (!alreadyDead)
+            {
+                playerAnimator.SetTrigger("dead");
+                alreadyDead = true;
+            }
+        }
     }
 
     private void MovementAnimations()
@@ -54,20 +76,20 @@ public class PlayerAnimator : MonoBehaviour
         {
             if (playerMovement.forwardInput != 0)
             {
-                playerAnimator.SetFloat("vMovement", Mathf.Lerp(currentV, playerMovement.forwardInput * shiftMultiplier, moveLerpSpeed * Time.deltaTime));
+                playerAnimator.SetFloat("vMovement", Mathf.Lerp(currentV, playerMovement.forwardInput * shiftMultiplier, 1 / moveLerpSpeed));
             }
             else
             {
-                playerAnimator.SetFloat("vMovement", Mathf.Lerp(currentV, 0f, moveLerpSpeed * Time.deltaTime));
+                playerAnimator.SetFloat("vMovement", Mathf.Lerp(currentV, 0f, 1 / moveLerpSpeed));
             }
 
             if (playerMovement.sideInput != 0)
             {
-                playerAnimator.SetFloat("hMovement", Mathf.Lerp(currentH, playerMovement.sideInput * shiftMultiplier, moveLerpSpeed * Time.deltaTime));
+                playerAnimator.SetFloat("hMovement", Mathf.Lerp(currentH, playerMovement.sideInput * shiftMultiplier, 1 / moveLerpSpeed));
             }
             else
             {
-                playerAnimator.SetFloat("hMovement", Mathf.Lerp(currentH, 0f, moveLerpSpeed * Time.deltaTime));
+                playerAnimator.SetFloat("hMovement", Mathf.Lerp(currentH, 0f, 1 / moveLerpSpeed));
             }
 
         }
@@ -107,8 +129,6 @@ public class PlayerAnimator : MonoBehaviour
 
     private void ArmAvatarAnimations()
     {
-        playerAnimator.SetLayerWeight(1, 1);
-
         if (playerMovement.forwardInput == 0 && playerMovement.sideInput == 0)
         {
             if (!startIdling)

@@ -2,13 +2,15 @@ using UnityEngine;
 
 public class ImpactEffect : MonoBehaviour
 {
-    void Awake()
+    private void Awake()
     {
-        Invoke("DestroyEffect", 1f);
-    }
-
-    private void DestroyEffect()
-    {
-        Destroy(gameObject);
+        if (gameObject.name == "Hit Environment(Clone)")
+        {
+            Destroy(gameObject, 5f);
+        }
+        else
+        {
+            Destroy(gameObject, 1f);
+        }
     }
 }

@@ -1327,6 +1327,65 @@ Transform:
   m_Father: {fileID: 6014596773677086776}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3806454472924613321
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4607566556926560147}
+  - component: {fileID: 5232598801914971529}
+  - component: {fileID: 7518853590615569262}
+  m_Layer: 0
+  m_Name: Attack Range
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4607566556926560147
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3806454472924613321}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5568479186155020315}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5232598801914971529
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3806454472924613321}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3, y: 2, z: 1.5}
+  m_Center: {x: 0, y: 1, z: 0.75}
+--- !u!114 &7518853590615569262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3806454472924613321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42232ae508f727444b97c26312fb8c7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
 --- !u!1 &3931477445908191604
 GameObject:
   m_ObjectHideFlags: 0
@@ -1663,6 +1722,7 @@ Transform:
   - {fileID: 1686578591941908536}
   - {fileID: 78642146896461967}
   - {fileID: 5390121748235432140}
+  - {fileID: 4607566556926560147}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1712,16 +1772,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e052253e2b39e746a12ffa535fe619a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyAnimator: {fileID: 1992590521093126753}
+  enemyAnimator: {fileID: 0}
   ragdollRb: []
   ragdollCollider: []
   ragdollJoints: []
   enemyOrientation: {fileID: 5390121748235432141}
   player: {fileID: 0}
-  enemyRb: {fileID: 0}
-  enemyCollider: {fileID: 0}
-  maxHealth: 100
-  health: 0
+  enemyCollider: {fileID: 5390121748869133259}
+  enemyAttack: {fileID: 0}
+  enemyAttackRange: {fileID: 3806454472924613321}
+  gameManager: {fileID: 0}
 --- !u!1 &5247447108432758198
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,10 +1,13 @@
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private GameObject orientation;
     [SerializeField] private Rigidbody playerRb;
     [SerializeField] private LayerMask groundMask;
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private Rig playerRig;
 
     public float forwardInput { get; private set; }
     public float sideInput { get; private set; }
@@ -29,6 +32,8 @@ public class PlayerMovement : MonoBehaviour
         orientation = GameObject.Find("Orientation");
         playerRb = GetComponent<Rigidbody>();
         groundMask = LayerMask.GetMask("Environment");
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        playerRig = GameObject.Find("Player Rig").GetComponent<Rig>();
 
         Physics.gravity *= gravityMultiplier;
     }
@@ -37,10 +42,27 @@ public class PlayerMovement : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(transform.position, groundedSphereRadius, groundMask);
 
-        MovementInput();
-        ControlDragAndSpeed();
+        if (!gameManager.universalGameOver)
+        {
+            playerRig.weight = 1;
 
-        JumpInput();
+            MovementInput();
+            ControlDragAndSpeed();
+
+            JumpInput();
+        }
+        else
+        {
+            if (isGrounded)
+            {
+                playerRb.drag = 100f;
+            }
+
+            playerRig.weight = 0;
+
+            forwardInput = 0;
+            sideInput = 0;
+        }
     }
 
     private void FixedUpdate()

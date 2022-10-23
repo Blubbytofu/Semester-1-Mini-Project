@@ -12,6 +12,7 @@ public class PlayerProjectileBehavior : MonoBehaviour
 
     private void Awake()
     {
+        Destroy(gameObject, maxTimeAlive);
         startingTimeAlive = Time.time;
     }
 
@@ -31,16 +32,8 @@ public class PlayerProjectileBehavior : MonoBehaviour
         {
             hasCollided = true;
             enemyBehavior = other.GetComponent<EnemyBehavior>();
-            enemyBehavior.TakeDamage(101);
+            enemyBehavior.TakeDamage(50);
             Instantiate(hitEnemyEffect, transform.position, Quaternion.identity);
-            Destroy(gameObject);
-        }
-    }
-
-    private void Update()
-    {
-        if (Time.time - startingTimeAlive > maxTimeAlive)
-        {
             Destroy(gameObject);
         }
     }

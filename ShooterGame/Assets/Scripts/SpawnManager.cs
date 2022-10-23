@@ -1,55 +1,64 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    public GameObject enemyPrefab;
-    [SerializeField] GameObject player;
+    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private GameObject player;
+    [SerializeField] private GameManager gameManager;
 
-    private Vector3 arenaCenter = Vector3.zero;
+    [SerializeField] private bool activeRound;
+    [SerializeField] private float roundBreak = 1f;
+    public int waveNumber { get; private set; }
+    public int enemyCount { get; private set; }
 
-    [SerializeField] private int waveNumber = 1;
-    [SerializeField] private int enemyCount;
-
-    public float spawnRange = 40f;
-    public float arenaRadius = 49f;
+    [SerializeField] private float spawnRange = 20f;
+    [SerializeField] private float arenaRadius = 49f;
 
     private void Start()
     {
-        SpawnEnemyWave(waveNumber);
+        player = GameObject.Find("Player");
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+
+        SpawnEnemyWave();
     }
 
     private void Update()
     {
-        enemyCount = FindObjectsOfType<EnemyBehavior>().Length;
-        if (enemyCount == 0)
+        enemyCount = FindObjectsOfType<EnemyAttack>().Length;
+
+        if (enemyCount == 0 && activeRound && !gameManager.universalGameOver)
         {
-            waveNumber++;
-            SpawnEnemyWave(waveNumber);
+            activeRound = false;
+            Invoke("SpawnEnemyWave", roundBreak);
         }
     }
 
-    private void SpawnEnemyWave(int number)
+    private void SpawnEnemyWave()
     {
-        for (int k = 0; k < number; k++)
+        waveNumber++;
+        activeRound = true;
+        for (int k = 0; k < waveNumber; k++)
         {
-            InstantiateEnemy();
+            Instantiate(enemyPrefab, GetSpawnPoint(), Quaternion.identity);
         }
-    }
-
-    private void InstantiateEnemy()
-    {
-        Instantiate(enemyPrefab, GetSpawnPoint(), Quaternion.identity);
     }
 
     private Vector3 GetSpawnPoint()
     {
-        return arenaCenter + new Vector3(GetReasonableDistance(player.transform.position.x + spawnRange), 0f, GetReasonableDistance(player.transform.position.z + spawnRange));
-    }
+        Vector2 posInUnitCircle = Random.insideUnitCircle.normalized;
+        Vector3 spawnPoint =  player.transform.position + Random.Range(spawnRange, arenaRadius) * new Vector3(posInUnitCircle.x, 0, posInUnitCircle.y);
+        spawnPoint.y = 0;
 
-    private float GetReasonableDistance(float positionComponent)
-    {
-        return Random.Range(Random.Range(-arenaRadius, -positionComponent), Random.Range(positionComponent, arenaRadius));
+        if (Mathf.Abs(spawnPoint.x) > arenaRadius)
+        {
+            spawnPoint.x *= -1;
+        }
+
+        if (Mathf.Abs(spawnPoint.z) > arenaRadius)
+        {
+            spawnPoint.z *= -1;
+        }
+
+        return spawnPoint;
     }
 }

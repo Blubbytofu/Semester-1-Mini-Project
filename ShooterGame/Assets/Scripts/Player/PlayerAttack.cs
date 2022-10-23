@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-    
+    [SerializeField] private GameManager gameManager;
     [SerializeField] private Camera playerCamera;
     [SerializeField] private Transform leftHandPos;
     [SerializeField] private Transform rightHandPos;
@@ -16,11 +16,22 @@ public class PlayerAttack : MonoBehaviour
     public bool hasCastAnimation;
 
     private Vector3 projectileDirection;
-    public float projectileSpeed = 1000f;
+    [SerializeField] private float projectileSpeed = 1000f;
+
+    private void Start()
+    {
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        playerCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+        leftHandPos = GameObject.Find("Left Hand Cast Position").GetComponent<Transform>();
+        rightHandPos = GameObject.Find("Right Hand Cast Position").GetComponent<Transform>();
+    }
 
     private void Update()
     {
-        GetAttack();
+        if (!gameManager.universalGameOver)
+        {
+            GetAttack();
+        }
     }
 
     private void GetAttack()
@@ -29,27 +40,11 @@ public class PlayerAttack : MonoBehaviour
         {
             if (Time.time > castTime + castCooldown)
             {
-                CastSpell();
+                hasCastAnimation = true;
+                leftHand = !leftHand;
                 castTime = Time.time;
             }
         }
-    }
-
-    private void CastSpell()
-    {
-        Ray aimRay = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        RaycastHit hit;
-        if (Physics.Raycast(aimRay, out hit))
-        {
-            castDestination = hit.point;
-        }
-        else
-        {
-            castDestination = aimRay.GetPoint(100f);
-        }
-
-        hasCastAnimation = true;
-        leftHand = !leftHand;
     }
 
     //SpawnProjectile method is called by an animation event and initiates a projectile's velocity and direction
@@ -66,6 +61,18 @@ public class PlayerAttack : MonoBehaviour
         }
 
         GameObject projectileObject = Instantiate(projectile, startingPoint.position, Quaternion.identity);
+
+        Ray aimRay = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        RaycastHit hit;
+        if (Physics.Raycast(aimRay, out hit))
+        {
+            castDestination = hit.point;
+        }
+        else
+        {
+            castDestination = aimRay.GetPoint(100f);
+        }
+
 
         projectileDirection = castDestination - startingPoint.position;
         projectileObject.transform.forward = projectileDirection.normalized;
